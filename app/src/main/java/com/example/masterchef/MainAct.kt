@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainAct : AppCompatActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
+    private var idMenuItemSelected: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +24,9 @@ class MainAct : AppCompatActivity() {
 
     private fun initViews() {
         bottomNavigationView = findViewById(R.id.bottomNavigation)
+
+        // Open app auto show HomeFragment
+        idMenuItemSelected = bottomNavigationView.menu.getItem(0).itemId
         openFragment(HomeFragment.newInstance(""))
     }
 
@@ -35,6 +39,8 @@ class MainAct : AppCompatActivity() {
                 R.id.navSetting -> openFragment(SettingFragment.newInstance(""))
                 else -> Log.e("Logger", "Bottom Navigation Failed")
             }
+            idMenuItemSelected = it.itemId
+            Log.e("Logger", idMenuItemSelected.toString())
             return@setOnNavigationItemSelectedListener true
         }
     }
@@ -42,8 +48,19 @@ class MainAct : AppCompatActivity() {
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout_main, fragment)
-        transaction.addToBackStack(null)
         transaction.commit()
+    }
+    
+    override fun onBackPressed() {
+
+        // How to handle bottom navigation perfectly with back pressed
+        var idMenuHomeFragment = bottomNavigationView.menu.getItem(0).itemId
+        if(idMenuHomeFragment != idMenuItemSelected){
+            openFragment(HomeFragment.newInstance(""))
+            bottomNavigationView.selectedItemId = R.id.navHome
+        }else{
+            super.onBackPressed()
+        }
     }
 
 }
