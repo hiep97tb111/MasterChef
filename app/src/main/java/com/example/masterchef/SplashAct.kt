@@ -10,7 +10,7 @@ class SplashAct: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_splash)
+//        setContentView(R.layout.act_splash)
 
         estimateTimeAnimation()
 
